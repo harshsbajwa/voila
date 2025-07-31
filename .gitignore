@@ -16,4 +16,5 @@ wheels/
 .volumes
 
 # Data
-ohlcv.duckdb
+*.duckdb
+*.parquet
