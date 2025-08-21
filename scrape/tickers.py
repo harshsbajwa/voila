@@ -16,8 +16,10 @@ def fetch(url: str) -> pl.DataFrame:
 
 def filter(df: pl.DataFrame) -> list[str]:
     filtered_df = df.filter(
-        # exclude warrants, units, preferred shares, etc.
-        (pl.col("Security Name").str.contains("Common"))
+        (
+            # exclude warrants, units, preferred shares, etc.
+            pl.col("Security Name").str.contains("Common")
+        )
     )
     tickers = filtered_df.get_column("Symbol").unique().sort().to_list()
     return tickers

@@ -20,3 +20,13 @@ wheels/
 # Data
 *.duckdb
 *.parquet
+edgar_cache/
+
+# Node
+node_modules/
+
+# Airflow
+airflow/logs/
+airflow/airflow.db
+airflow/*.pid
+airflow/webserver_config.py
