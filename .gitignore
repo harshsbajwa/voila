@@ -25,8 +25,14 @@ edgar_cache/
 # Node
 node_modules/
 
+# Environment files
+.env
+.env.production
+.env.local
+
 # Airflow
 airflow/logs/
 airflow/airflow.db
 airflow/*.pid
 airflow/webserver_config.py
+airflow.cfg.production

@@ -11,13 +11,16 @@ interface CompanyTooltipProps {
 export const CompanyTooltip: React.FC<CompanyTooltipProps> = ({ mouseX, mouseY, visible }) => {
   const company = useSelector((state: RootState) => state.companies.hoveredCompany)
   
-  if (!visible || !company) {
+  // Hide tooltip on mobile devices
+  const isMobile = window.innerWidth <= 640
+  
+  if (!visible || !company || isMobile) {
     return null
   }
   
   return (
     <div
-      className="fixed pointer-events-none bg-gray-800 text-white p-3 rounded-lg shadow-lg border border-gray-600 z-50 max-w-xs"
+      className="fixed pointer-events-none bg-gray-800 text-white p-3 rounded-lg shadow-lg border border-gray-600 z-[60] max-w-xs"
       style={{
         left: `${mouseX + 15}px`,
         top: `${mouseY}px`,

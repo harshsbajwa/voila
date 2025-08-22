@@ -109,6 +109,8 @@ class Settings(BaseSettings):
         "http://localhost:5174",  # Vite preview server
         "http://localhost:3000",  # Alternative dev port
         "http://localhost:8000",  # Backend itself
+        "https://voila.amneet.me",  # Production frontend
+        "https://api.amneet.me",  # Production API
         "*",  # Allow all in dev; remove for production
     ]
 

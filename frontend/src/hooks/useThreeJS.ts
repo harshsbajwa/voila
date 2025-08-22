@@ -14,6 +14,8 @@ const CONFIG = {
   MAX_POINTS: 5000,
   MIN_ZOOM: 0.8,
   MAX_ZOOM: 250,
+  // Camera bounds to keep view within reasonable limits
+  MAX_PAN_DISTANCE: 2000, // Maximum distance camera can move from center
 }
 
 export const useThreeScene = (containerRef: React.RefObject<HTMLElement>) => {
@@ -60,9 +62,16 @@ export const useThreeScene = (containerRef: React.RefObject<HTMLElement>) => {
     camera.updateProjectionMatrix()
     cameraRef.current = camera
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' })
+    const renderer = new THREE.WebGLRenderer({ 
+      antialias: window.devicePixelRatio <= 1, // Disable antialiasing on high DPI displays for performance
+      powerPreference: 'high-performance',
+      alpha: false,
+      stencil: false,
+      depth: true
+    })
     renderer.setSize(width, height)
-    renderer.setPixelRatio(window.devicePixelRatio)
+    // Limit pixel ratio to 2 for mobile performance
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     rendererRef.current = renderer
     container.appendChild(renderer.domElement)
 
@@ -181,9 +190,24 @@ export const useThreeScene = (containerRef: React.RefObject<HTMLElement>) => {
   const handlePan = useCallback((deltaX: number, deltaY: number) => {
     const camera = cameraRef.current
     if (!camera) return
+    
     const panSpeed = 2.5 / camera.zoom
-    camera.position.x -= deltaX * panSpeed
-    camera.position.z -= deltaY * panSpeed
+    const newX = camera.position.x - deltaX * panSpeed
+    const newZ = camera.position.z - deltaY * panSpeed
+    
+    // Apply bounds to prevent camera from going too far
+    const maxDistance = CONFIG.MAX_PAN_DISTANCE
+    const distanceFromCenter = Math.sqrt(newX * newX + newZ * newZ)
+    
+    if (distanceFromCenter <= maxDistance) {
+      camera.position.x = newX
+      camera.position.z = newZ
+    } else {
+      // Scale down the movement to stay within bounds
+      const scale = maxDistance / distanceFromCenter
+      camera.position.x = newX * scale
+      camera.position.z = newZ * scale
+    }
   }, [])
   
   const handleZoom = useCallback((delta: number, mouseX: number, mouseY: number) => {

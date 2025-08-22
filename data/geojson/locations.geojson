@@ -7416,6 +7416,21 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -77.094483746695,
+          38.984805978337
+        ]
+      },
+      "properties": {
+        "ticker": "DAIC",
+        "name": "CID HOLDCO, INC.",
+        "address": "7500 OLD GEORGETOWN ROAD, SUITE 901, BETHESDA, MD, 20814"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -122.0937678579,
           47.66542024014
         ]
@@ -10032,7 +10047,7 @@
       },
       "properties": {
         "ticker": "FLYE",
-        "name": "Fly-E Group, Inc.",
+        "name": "FLY-E GROUP, INC.",
         "address": "136-40 39TH AVE., STE202, QUEENS, NY, 11354"
       }
     },
@@ -17562,7 +17577,7 @@
       },
       "properties": {
         "ticker": "MZTI",
-        "name": "Lancaster Colony Corporation",
+        "name": "The Marzetti Company",
         "address": "380 POLARIS PARKWAY, WESTERVILLE, OH, 43082"
       }
     },
@@ -21396,14 +21411,14 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -73.992561888169,
-          40.744546160724
+          -73.996331655121,
+          40.753464598811
         ]
       },
       "properties": {
         "ticker": "PTON",
         "name": "Peloton Interactive, Inc.",
-        "address": "C/O PELOTON INTERACTIVE, INC., 125 W. 25TH ST., 11TH FLOOR, NEW YORK, NY, 10001"
+        "address": "C/O PELOTON INTERACTIVE, INC., 441 NINTH AVE., SIXTH FLOOR, NEW YORK, NY, 10001"
       }
     },
     {
@@ -22056,14 +22071,14 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -96.963665028166,
-          32.885116880586
+          -111.885241776886,
+          33.283291820066
         ]
       },
       "properties": {
         "ticker": "RDNW",
         "name": "RumbleOn, Inc.",
-        "address": "901 W. WALNUT HILL LANE, SUITE 110A, IRVING, TX, 75038"
+        "address": "2677 E WILLIS ROAD, CHANDLER, AZ, 85286"
       }
     },
     {
@@ -22274,6 +22289,21 @@
         "ticker": "REYN",
         "name": "REYNOLDS CONSUMER PRODUCTS INC.",
         "address": "1900 W. FIELD COURT, LAKE FOREST, IL, 60045"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -117.095200445196,
+          33.020364041123
+        ]
+      },
+      "properties": {
+        "ticker": "RFIL",
+        "name": "R F INDUSTRIES LTD",
+        "address": "16868 VIA DEL CAMPO COURT, SUITE 200, SAN DIEGO, CA, 92127"
       }
     },
     {
@@ -23472,7 +23502,7 @@
       },
       "properties": {
         "ticker": "SEGG",
-        "name": "LOTTERY.COM INC.",
+        "name": "Lottery.com Inc.",
         "address": "5049 EDWARDS RAND RD., 4TH FLOOR, FT. WORTH, TX, 76109"
       }
     },
@@ -25056,21 +25086,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -71.088247803737,
-          42.366618193967
-        ]
-      },
-      "properties": {
-        "ticker": "SRRK",
-        "name": "SCHOLAR ROCK HOLDING CORP",
-        "address": "301 BINNEY STREET, 3RD FLOOR, CAMBRIDGE, MA, 02142"
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
           -80.104123400873,
           26.398756485793
         ]
@@ -26001,14 +26016,14 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -95.418956621248,
-          29.725422891349
+          -80.13810701425,
+          26.119267520687
         ]
       },
       "properties": {
         "ticker": "TCRT",
         "name": "Alaunos Therapeutics, Inc.",
-        "address": "2617 BISSONNET ST, SUITE 233, HOUSTON, TX, 77005"
+        "address": "501 E LAS OLAS BLVD, SUITE 300, FORT LAUDERDALE, FL, 33301"
       }
     },
     {
@@ -26909,6 +26924,36 @@
         "ticker": "TTNP",
         "name": "Titan Pharmaceuticals, Inc.",
         "address": "400 OYSTER POINT BLVD, SUITE 505, SAN FRANCISCO, CA, 94080"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -93.457568554617,
+          44.984826953556
+        ]
+      },
+      "properties": {
+        "ticker": "TTSH",
+        "name": "TILE\u00a0SHOP\u00a0HOLDINGS,\u00a0INC.",
+        "address": "14000 CARLSON PARKWAY, PLYMOUTH, MN, 55441"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.983526815946,
+          40.756226639286
+        ]
+      },
+      "properties": {
+        "ticker": "TTWO",
+        "name": "TAKE-TWO INTERACTIVE SOFTWARE,\u00a0INC.",
+        "address": "110 WEST 44TH STREET, NEW YORK, NY, 10036"
       }
     },
     {
@@ -28341,6 +28386,21 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -118.357463383677,
+          34.089723663848
+        ]
+      },
+      "properties": {
+        "ticker": "VWAV",
+        "name": "VisionWave Holdings, Inc.",
+        "address": "1063 N. SPAULDING AVE, WEST HOLLYWOOD, CA, 90046"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -71.248769342256,
           42.424631848335
         ]
@@ -29451,6 +29511,21 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          -121.893976994782,
+          37.332650297303
+        ]
+      },
+      "properties": {
+        "ticker": "ZM",
+        "name": "Zoom Communications, Inc.",
+        "address": "55 ALMADEN BOULEVARD, 6TH FLOOR, SAN JOSE, CA, 95113"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           -121.95476757017,
           37.417424948095
         ]
@@ -29519,6 +29594,21 @@
         "ticker": "ZYME",
         "name": "ZYMEWORKS INC.",
         "address": "108 PATRIOT DRIVE, SUITE A, MIDDLETOWN, DE, 19709"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -104.861279318853,
+          39.541333709235
+        ]
+      },
+      "properties": {
+        "ticker": "ZYXI",
+        "name": "Zynex,\u00a0Inc.",
+        "address": "9655 MAROON CIRCLE, ENGLEWOOD, CO, 80112"
       }
     }
   ]

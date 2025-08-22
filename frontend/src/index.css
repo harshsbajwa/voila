@@ -30,8 +30,43 @@
     @apply absolute top-5 left-5 bg-black/80 backdrop-blur-lg border border-white/10 rounded-xl p-5 w-[320px] z-10;
   }
   
+  .hud.collapsed {
+    @apply w-auto;
+  }
+  
+  .hud-header {
+    @apply flex justify-between items-center mb-4;
+  }
+  
   .hud h2 {
-    @apply text-lg font-semibold mb-4 text-green-400;
+    @apply text-lg font-semibold text-green-400;
+  }
+  
+  .hud-toggle {
+    @apply w-6 h-6 flex items-center justify-center text-sm font-bold cursor-pointer;
+  }
+  
+  /* Mobile HUD adjustments */
+  @media (max-width: 640px) {
+    .hud {
+      @apply top-5 left-3 right-3 w-auto p-3 text-sm;
+    }
+    
+    .hud h2 {
+      @apply text-base;
+    }
+    
+    .stats-grid {
+      @apply grid-cols-2 gap-2;
+    }
+    
+    .stat-item {
+      @apply p-2;
+    }
+    
+    .stat-value {
+      @apply text-lg;
+    }
   }
   
   .stats-grid {
@@ -75,6 +110,30 @@
   .chart-modal.active {
     @apply block;
     animation: fadeIn 0.3s ease-out;
+  }
+  
+  /* Mobile Chart Modal */
+  @media (max-width: 768px) {
+    .chart-modal.mobile-responsive {
+      @apply fixed inset-2 w-auto h-auto max-w-none max-h-none p-3 rounded-xl;
+      transform: none;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+    }
+    
+    .chart-modal.mobile-responsive .chart-header {
+      @apply mb-3 pb-3;
+    }
+    
+    .chart-modal.mobile-responsive .chart-title {
+      @apply text-lg;
+    }
+    
+    .chart-modal.mobile-responsive .chart-container {
+      @apply h-[calc(100%-60px)];
+    }
   }
   
   .chart-header {

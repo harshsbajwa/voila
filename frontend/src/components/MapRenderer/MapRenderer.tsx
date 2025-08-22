@@ -54,51 +54,150 @@ export const MapRenderer: React.FC<MapRendererProps> = ({ className }) => {
     let selectionStart = { x: 0, y: 0 }
     let selectionPoints: Point2D[] = []
     
-    const handleMouseDown = (e: MouseEvent) => {
+    // Touch state
+    let lastTouchPos = { x: 0, y: 0 }
+    let lastTouchDistance = 0
+    let touchStartTime = 0
+    
+    const getEventPos = (e: MouseEvent | TouchEvent): { x: number, y: number } => {
+      if ('touches' in e) {
+        const touch = e.touches[0] || e.changedTouches[0]
+        return { x: touch.clientX, y: touch.clientY }
+      }
+      return { x: e.clientX, y: e.clientY }
+    }
+    
+    const getTouchDistance = (e: TouchEvent): number => {
+      if (e.touches.length < 2) return 0
+      const touch1 = e.touches[0]
+      const touch2 = e.touches[1]
+      return Math.sqrt(
+        Math.pow(touch2.clientX - touch1.clientX, 2) +
+        Math.pow(touch2.clientY - touch1.clientY, 2)
+      )
+    }
+    
+    const handlePointerDown = (e: MouseEvent | TouchEvent) => {
       e.preventDefault()
-      if (selectionMode === 'pan') {
+      const pos = getEventPos(e)
+      
+      if ('touches' in e) {
+        touchStartTime = Date.now()
+        lastTouchPos = pos
+        if (e.touches.length === 2) {
+          lastTouchDistance = getTouchDistance(e)
+          // Don't enable dragging for two-finger gestures (pinch)
+          return
+        }
+      }
+      
+      if (selectionMode === 'pan' || 'touches' in e) {
         isDraggingRef.current = true
         container.style.cursor = 'grabbing'
       } else {
         isSelecting = true
-        selectionStart = { x: e.clientX, y: e.clientY }
-        selectionPoints = [{ x: e.clientX, y: e.clientY }]
+        selectionStart = pos
+        selectionPoints = [pos]
       }
     }
     
-    const handleMouseMove = (e: MouseEvent) => {
+    const handlePointerMove = (e: MouseEvent | TouchEvent) => {
       e.preventDefault()
-      setMousePos({ x: e.clientX, y: e.clientY })
+      const pos = getEventPos(e)
+      setMousePos(pos)
       
-      threeMouseMove(e)
-      
-      if (isDraggingRef.current) {
-        handlePan(e.movementX, e.movementY)
-      } else if (isSelecting) {
-        if (selectionMode === 'polygon') {
-            selectionPoints.push({ x: e.clientX, y: e.clientY })
-        }
-        dispatch({
-          type: 'map/setSelectionGeometry',
-          payload: {
-            type: selectionMode,
-            start: selectionStart,
-            current: { x: e.clientX, y: e.clientY },
-            points: selectionMode === 'polygon' ? selectionPoints : undefined
+      if ('touches' in e) {
+        // Handle touch move
+        if (e.touches.length === 1 && isDraggingRef.current) {
+          // Single touch pan with reduced sensitivity
+          const deltaX = pos.x - lastTouchPos.x
+          const deltaY = pos.y - lastTouchPos.y
+          
+          // Scale down touch sensitivity extremely for mobile (much gentler than mouse)
+          const touchSensitivity = 0.5
+          handlePan(deltaX * touchSensitivity, deltaY * touchSensitivity)
+          lastTouchPos = pos
+        } else if (e.touches.length === 2) {
+          // Disable panning when pinching
+          isDraggingRef.current = false
+          
+          // Pinch to zoom
+          const currentDistance = getTouchDistance(e)
+          if (lastTouchDistance > 0) {
+            const deltaDistance = currentDistance - lastTouchDistance
+            // Much more aggressive zoom for mobile (pinch gestures should zoom significantly more)
+            const zoomDelta = deltaDistance * 0.05
+            const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2
+            const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2
+            handleZoom(zoomDelta, centerX, centerY)
           }
-        })
+          lastTouchDistance = currentDistance
+        } else if (e.touches.length === 0) {
+          // All touches ended
+          isDraggingRef.current = false
+          lastTouchDistance = 0
+        }
+      } else {
+        // Handle mouse move
+        threeMouseMove(e)
+        
+        if (isDraggingRef.current) {
+          handlePan(e.movementX, e.movementY)
+        } else if (isSelecting) {
+          if (selectionMode === 'polygon') {
+              selectionPoints.push(pos)
+          }
+          dispatch({
+            type: 'map/setSelectionGeometry',
+            payload: {
+              type: selectionMode,
+              start: selectionStart,
+              current: pos,
+              points: selectionMode === 'polygon' ? selectionPoints : undefined
+            }
+          })
+        }
       }
     }
     
-    const handleMouseUp = (e: MouseEvent) => {
+    const handlePointerUp = (e: MouseEvent | TouchEvent) => {
       e.preventDefault()
+      const pos = getEventPos(e)
+      
       if (isDraggingRef.current) {
         isDraggingRef.current = false
         container.style.cursor = 'grab'
       }
-      if (isSelecting) {
-        isSelecting = false
-        performSelection(e)
+      
+      if ('touches' in e) {
+        // Handle touch end
+        const touchDuration = Date.now() - touchStartTime
+        
+        if (touchDuration < 200 && !isDraggingRef.current) {
+          // Single tap on mobile - directly open chart (no hover card)
+          const fakeMouseEvent = {
+            clientX: pos.x,
+            clientY: pos.y,
+            preventDefault: () => {}
+          } as MouseEvent
+          threeMouseMove(fakeMouseEvent)
+          
+          // Delay to let hover detection work, then open chart
+          setTimeout(() => {
+            console.log('Mobile tap detected, hovered company:', hoveredCompanyId)
+            if (hoveredCompanyId) {
+              dispatch({ type: 'charts/setActiveChart', payload: { ticker: hoveredCompanyId }})
+              dispatch({ type: 'ui/openChartModal' })
+            }
+          }, 100)
+        }
+        lastTouchDistance = 0
+      } else {
+        // Handle mouse up
+        if (isSelecting) {
+          isSelecting = false
+          performSelection(e)
+        }
       }
     }
     
@@ -145,16 +244,30 @@ export const MapRenderer: React.FC<MapRendererProps> = ({ className }) => {
       selectionPoints = []
     }
     
-    container.addEventListener('mousedown', handleMouseDown)
-    window.addEventListener('mousemove', handleMouseMove)
-    window.addEventListener('mouseup', handleMouseUp)
+    // Mouse events
+    container.addEventListener('mousedown', handlePointerDown)
+    window.addEventListener('mousemove', handlePointerMove)
+    window.addEventListener('mouseup', handlePointerUp)
     container.addEventListener('wheel', handleWheel, { passive: false })
     
+    // Touch events
+    container.addEventListener('touchstart', handlePointerDown, { passive: false })
+    window.addEventListener('touchmove', handlePointerMove, { passive: false })
+    window.addEventListener('touchend', handlePointerUp, { passive: false })
+    
+    // Prevent context menu on long press
+    container.addEventListener('contextmenu', (e) => e.preventDefault())
+    
     return () => {
-      container.removeEventListener('mousedown', handleMouseDown)
-      window.removeEventListener('mousemove', handleMouseMove)
-      window.removeEventListener('mouseup', handleMouseUp)
+      container.removeEventListener('mousedown', handlePointerDown)
+      window.removeEventListener('mousemove', handlePointerMove)
+      window.removeEventListener('mouseup', handlePointerUp)
       container.removeEventListener('wheel', handleWheel)
+      
+      container.removeEventListener('touchstart', handlePointerDown)
+      window.removeEventListener('touchmove', handlePointerMove)
+      window.removeEventListener('touchend', handlePointerUp)
+      container.removeEventListener('contextmenu', (e) => e.preventDefault())
     }
   }, [selectionMode, handlePan, handleZoom, threeMouseMove, unprojectScreenCoords, getProjectedCoords, selectRectangle, selectCircle, selectPolygon, dispatch])
 
@@ -177,6 +290,11 @@ export const MapRenderer: React.FC<MapRendererProps> = ({ className }) => {
         cursor: cursorStyle(),
         willChange: performanceMode === 'high' ? 'transform' : 'auto',
         transform: 'translateZ(0)',
+        touchAction: 'none', // Prevent default touch behaviors
+        userSelect: 'none',   // Prevent text selection
+        WebkitUserSelect: 'none',
+        msUserSelect: 'none',
+        WebkitTouchCallout: 'none' // Prevent iOS callout on long press
       }}
     >
       {!sceneReady && (
